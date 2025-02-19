@@ -23,28 +23,45 @@ function App() {
       conta: conta,
       saldo: saldo
     }
+    setConta(conta)
   }
 
-  const depositar = (conta, saldo ) => {
-
+  const encerrarConta = (conta, saldo ) => {
+      if (saldo < 0){
+        conta.tipo = 4
+        return conta
+      }
   }
 
+  const depositar = (conta, valor) => {
+    if (conta.tipo !== 4) {
+      conta.saldo -= valor
+      return conta
+    }
+    return null 
+  }
+  
   const creditar= () => {
+    if (conta.tipo !== 4) {
+      conta.saldo += valor
+      return conta
+    }
+    return null 
+  }
 
+  const consultarConta= (conta) => {
+    return conta;
   }
   
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
+        <form> 
+        <input type="text" name="agenciaName" id="name" value={agencia.nome} required/>
+        <input type="text" name="bancoName" id="name" value={banco.nome} required/>
+        <input type="number" name="agenciaNumero" id="number" value={agencia.nome} required/>
+        <input type="number" name="bancoNumero" id="number" value={banco.nome} required/>
+        </form>
         <button onClick={abrirConta}>
           Abrir Conta
         </button>
