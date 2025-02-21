@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import './App.css'
+import '../styles/App.css'
+import Header from './Header.jsx'
+import Footer from './Footer.jsx'
 
 function Banco() {
+  const [nome, setNome] = useState('')
   const [bancoNome, setBanconome] = useState('')
   const [agenciaNome, setAgencianome] = useState('')
   const [numeroBanco, setNumerobanco] = useState('')
@@ -39,13 +42,25 @@ function Banco() {
   }
 
   const debitar = (valor) => {
+    if (isNaN(valor) || valor.trim() === '') { 
+      alert("Insira um número!")
+      return null;
+    }
     const valorDeb = parseFloat(valor)
-    if (conta && conta.tipo !== 4) {
+    if (conta && conta.tipo !== 4 ) {
+      if(valor == isNaN){
+        return null
+      }
+      if (isNaN(valorCred)) {
+        alert("Insira um número válido!")
+        return null
+      }
       const novaConta = { ...conta, saldo: conta.saldo - valorDeb }
       setConta(novaConta)
       setValor('')
       setMostrarDeb(false)
       alert('Débito realizado com sucesso!')
+      setInformacaoConta(false)
       return novaConta
     }
     if(conta.tipo == 4){
@@ -58,12 +73,23 @@ function Banco() {
   }
 
   const creditar = (valor) => {
+    if (isNaN(valor) || valor.trim() === '') { 
+      alert("Insira um número!")
+      return null;
+    }
+  
     const valorCred = parseFloat(valor)
+
+    if (isNaN(valorCred)) {
+      alert("Insira um número válido!")
+      return null;
+    }
     if (conta && conta.tipo !== 4) {
       const novaConta = { ...conta, saldo: conta.saldo + valorCred }
       setConta(novaConta)
       setValor('')
       setMostrarCredito(false)
+      setInformacaoConta(false)
       alert('Crédito realizado com sucesso!')
       return novaConta
     }
@@ -86,15 +112,29 @@ function Banco() {
   return (
     <>
       {containerBanco ? (
-        <div>
-          <form onSubmit={abrirConta}>
+        <div className="body-home">
+          <Header />
+          <div className='container-home'>
+            <h1>Sistema Bancário</h1>
+          
+            <h3>Facilite suas transações a qualquer hora, em qualquer lugar.</h3> 
+            <div className='buttons-home'>
+            <button id="btn-acc"><a href='#container-form'>Abrir Conta</a></button>
+            <button id="btn-more"><a href='#footer'>Saiba mais</a></button>
+            </div>
+      
+          </div>
+            <div id="container-form" className='container-form'>
+          <form onSubmit={abrirConta} className='form-conta'>
             <h1>Criar conta</h1>
+            <label>Nome</label>
+            <input type="text" name="Name" id="Name" value={nome} onChange={(e) => setNome(e.target.value)} required />
             <label>Nome da agência</label>
             <input type="text" name="agenciaName" id="agenciaName" value={agenciaNome} onChange={(e) => setAgencianome(e.target.value)} required />
-            <label>Nome do banco</label>
-            <input type="text" name="bancoName" id="bancoName" value={bancoNome} onChange={(e) => setBanconome(e.target.value)} required />
             <label>Número da agência</label>
             <input type="number" name="agenciaNumero" id="agenciaNumero" value={numeroAgencia} onChange={(e) => setNumeroagencia(e.target.value)} required />
+            <label>Nome do banco</label>
+            <input type="text" name="bancoName" id="bancoName" value={bancoNome} onChange={(e) => setBanconome(e.target.value)} required />
             <label>Número do banco</label>
             <input type="number" name="bancoNumero" id="bancoNumero" value={numeroBanco} onChange={(e) => setNumerobanco(e.target.value)} required />
             <label>Tipo de conta</label>
@@ -106,10 +146,21 @@ function Banco() {
             </select>
             <button type="submit">Abrir Conta</button>
           </form>
+            </div>
+          <Footer/>
         </div>
       ) : (
         <>
-          <h1>Bem vindo!</h1>
+        <div className='body-conta'>
+        <svg xmlns="http://www.w3.org/2000/svg" className="svg-conta" viewBox="0 0 1440 320"><path fill="#6b70db" fill-opacity="1" d="M0,192L40,181.3C80,171,160,149,240,117.3C320,85,400,43,480,74.7C560,107,640,213,720,256C800,299,880,277,960,245.3C1040,213,1120,171,1200,149.3C1280,128,1360,128,1400,128L1440,128L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z"></path></svg>
+          <div className='content-conta'>
+          <h1>Bem vindo!, {nome}.</h1>
+          <h2> Pronto para debitar, creditar ou consultar? Tudo ao seu alcance!</h2>
+          <h3> Saldo disponível: {conta.saldo}</h3>
+          </div>
+          <div className='grid-conta'>
+          <div className='body-actions'>
+          <div className='actions-conta'>
           <ul>
             <li>
               <button onClick={() => { setMostrarDeb(true); setMostrarCredito(false) }}>Débito</button>
@@ -131,8 +182,11 @@ function Banco() {
             </li>
             <li><button onClick={consultarConta}>Consultar Conta</button></li>
           </ul>
+          </div>
+          </div>
+          <div className='body-info'>
           {informacaoConta && (
-            <div>
+            <div className='container-info'>
               <h2>Informações da Conta:</h2>
               <p>Nome do banco: {informacaoConta.banco.bancoNome}</p>
               <p>Número do banco: {informacaoConta.banco.numeroBanco}</p>
@@ -142,6 +196,9 @@ function Banco() {
               <p>Saldo: R${informacaoConta.saldo}</p>
             </div>
           )}
+          </div>
+          </div>
+          </div>
         </>
       )}
     </>
