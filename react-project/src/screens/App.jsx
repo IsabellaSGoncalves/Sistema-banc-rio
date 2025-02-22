@@ -2,6 +2,7 @@ import { useState } from 'react'
 import '../styles/App.css'
 import Header from './Header.jsx'
 import Footer from './Footer.jsx'
+import svg_pig from '../images/svg_pig.png'
 
 function Banco() {
   const [nome, setNome] = useState('')
@@ -44,21 +45,25 @@ function Banco() {
   const debitar = (valor) => {
     if (isNaN(valor) || valor.trim() === '') { 
       alert("Insira um número!")
-      return null;
+      return null
     }
+
     const valorDeb = parseFloat(valor)
+
+    if (isNaN(valorDeb)) {
+      alert("Insira um número válido!")
+      return null
+    }
+
     if (conta && conta.tipo !== 4 ) {
       if(valor == isNaN){
-        return null
-      }
-      if (isNaN(valorCred)) {
-        alert("Insira um número válido!")
         return null
       }
       const novaConta = { ...conta, saldo: conta.saldo - valorDeb }
       setConta(novaConta)
       setValor('')
       setMostrarDeb(false)
+      encerrarConta()
       alert('Débito realizado com sucesso!')
       setInformacaoConta(false)
       return novaConta
@@ -75,7 +80,7 @@ function Banco() {
   const creditar = (valor) => {
     if (isNaN(valor) || valor.trim() === '') { 
       alert("Insira um número!")
-      return null;
+      return null
     }
   
     const valorCred = parseFloat(valor)
@@ -85,13 +90,19 @@ function Banco() {
       return null;
     }
     if (conta && conta.tipo !== 4) {
+      encerrarConta()
       const novaConta = { ...conta, saldo: conta.saldo + valorCred }
       setConta(novaConta)
       setValor('')
       setMostrarCredito(false)
       setInformacaoConta(false)
-      alert('Crédito realizado com sucesso!')
-      return novaConta
+      encerrarConta()
+      if(novaConta.saldo > 0){
+        alert('Crédito realizado com sucesso!')
+        return novaConta
+      }else{
+        alert("Sua conta está encerrada.")
+      }
     }
     if(conta.tipo == 4){
       alert("Sua conta está encerrada.")
@@ -115,15 +126,20 @@ function Banco() {
         <div className="body-home">
           <Header />
           <div className='container-home'>
+            <div className='grid-home'>
+              <div>
             <h1>Sistema Bancário</h1>
-          
             <h3>Facilite suas transações a qualquer hora, em qualquer lugar.</h3> 
             <div className='buttons-home'>
             <button id="btn-acc"><a href='#container-form'>Abrir Conta</a></button>
             <button id="btn-more"><a href='#footer'>Saiba mais</a></button>
             </div>
-      
+            </div>
+            <div>
+            <img src={svg_pig} alt="Imagem porco"></img>
+            </div>
           </div>
+            </div>
             <div id="container-form" className='container-form'>
           <form onSubmit={abrirConta} className='form-conta'>
             <h1>Criar conta</h1>
@@ -152,6 +168,9 @@ function Banco() {
       ) : (
         <>
         <div className='body-conta'>
+          <div className='body-btn-out'>
+        <button id="btn-out"><a href=''>SAIR</a></button>
+        </div>
         <svg xmlns="http://www.w3.org/2000/svg" className="svg-conta" viewBox="0 0 1440 320"><path fill="#6b70db" fill-opacity="1" d="M0,192L40,181.3C80,171,160,149,240,117.3C320,85,400,43,480,74.7C560,107,640,213,720,256C800,299,880,277,960,245.3C1040,213,1120,171,1200,149.3C1280,128,1360,128,1400,128L1440,128L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z"></path></svg>
           <div className='content-conta'>
           <h1>Bem vindo!, {nome}.</h1>
@@ -199,6 +218,7 @@ function Banco() {
           </div>
           </div>
           </div>
+          <div><Footer/></div>
         </>
       )}
     </>
