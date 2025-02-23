@@ -127,7 +127,7 @@ function Banco() {
           <Header />
           <div className='container-home'>
             <div className='grid-home'>
-              <div>
+              <div className='content-home'>
             <h1>Sistema Bancário</h1>
             <h3>Facilite suas transações a qualquer hora, em qualquer lugar.</h3> 
             <div className='buttons-home'>
