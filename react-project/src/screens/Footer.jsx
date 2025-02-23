@@ -20,6 +20,7 @@ function Footer() {
                 <li><FaFacebook /><a href="">Facebook</a></li>
                 <li><MdEmail /><a href="">E-mail</a></li>
                 <li><IoLogoWhatsapp /><a href="">Whatsapp</a></li>
+                <li id="footer-nome">©IsabellaSGoncalves</li>
             </ul>
             </div>
             </nav>                

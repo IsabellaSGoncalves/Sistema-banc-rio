@@ -10,6 +10,9 @@
   margin:0;
 }
 
+#footer-nome {
+  color: #eaeaee;
+}
 .nav-footer ul {
   list-style-type: none;
 }
